@@ -21,13 +21,27 @@ const resultDiv = document.getElementById("result");
 
 // التحقق من فتح صفحة المريض أولاً
 const scannedId = localStorage.getItem("scannedPatientId");
+const scanTime = localStorage.getItem("scanTime"); // وقت فتح صفحة المريض
 
-if (scannedId === patientId) {
-    resultDiv.innerHTML = "✅ This medicine belongs to the patient!";
-    resultDiv.className = "success";
-} else {
+if (!scannedId || !scanTime) {
     resultDiv.innerHTML = "❌ Please open the patient page first!";
     resultDiv.className = "error";
+} else {
+    const now = Date.now();
+    const elapsedMinutes = (now - parseInt(scanTime, 10)) / 1000 / 60;
+
+    if (elapsedMinutes > 1) { // شرط الدقيقة
+        resultDiv.innerHTML = "⌛️ Session expired. Please scan the patient page again!";
+        resultDiv.className = "error";
+        localStorage.removeItem("scannedPatientId");
+        localStorage.removeItem("scanTime");
+    } else if (scannedId === patientId) {
+        resultDiv.innerHTML = "✅ This medicine belongs to the patient!";
+        resultDiv.className = "success";
+    } else {
+        resultDiv.innerHTML = "❌ Please open the patient page first!";
+        resultDiv.className = "error";
+    }
 }
 </script>
 </body>
