@@ -19,9 +19,8 @@ body { font-family: Arial; text-align:center; padding:20px; }
 const patientId = "P504321"; // معرف المريض الصحيح
 const resultDiv = document.getElementById("result");
 
-// التحقق من فتح صفحة المريض أولاً
 const scannedId = localStorage.getItem("scannedPatientId");
-const scanTime = localStorage.getItem("scanTime"); // وقت فتح صفحة المريض
+const scanTime = localStorage.getItem("scanTime");
 
 if (!scannedId || !scanTime) {
     resultDiv.innerHTML = "❌ Please open the patient page first!";
@@ -39,7 +38,7 @@ if (!scannedId || !scanTime) {
         resultDiv.innerHTML = "✅ This medicine belongs to the patient!";
         resultDiv.className = "success";
     } else {
-        resultDiv.innerHTML = "❌ Please open the patient page first!";
+        resultDiv.innerHTML = "❌ Patient ID mismatch!";
         resultDiv.className = "error";
     }
 }
