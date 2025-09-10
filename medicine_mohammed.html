@@ -3,32 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <title>Medicine - Amlodipine</title>
+</head>
 <body>
-  <h1>Medicine Information</h1>
-  <div id="result"></div>
+  <h1>Medicine Page - Amlodipine 5mg Tablet</h1>
+  <p id="result">⏳ Checking patient match...</p>
 
   <script>
-    const patientId = "P504321";  // Linked patient
-    const medicine = "Amlodipine 5 mg Tablet";
-    const resultDiv = document.getElementById("result");
+    try {
+      const linkedPatientId = "P504321"; // Should match patient
+      const resultDiv = document.getElementById("result");
 
-    // Get data from localStorage
-    const scannedId = localStorage.getItem("scannedPatientId");
-    const scannedTime = localStorage.getItem("scannedTime");
+      const scannedPatient = localStorage.getItem("scannedPatient");
+      const scanTime = localStorage.getItem("scanTime");
 
-    if (!scannedId || !scannedTime) {
-      resultDiv.innerHTML = "❌ Please scan the patient first!";
-    } else {
-      const elapsed = (Date.now() - parseInt(scannedTime)) / 1000; // in seconds
-      if (elapsed > 60) {
-        resultDiv.innerHTML = "⏰ Time expired! Please scan the patient again.";
-      } else if (scannedId === patientId) {
-        resultDiv.innerHTML = ✅ This medicine belongs to the patient.<br><b>${medicine}</b>;
+      if (!scannedPatient || !scanTime) {
+        resultDiv.innerHTML = "❌ Please scan the patient first.";
       } else {
-        resultDiv.innerHTML = "❌ This medicine does not belong to the patient!";
+        const now = Date.now();
+        const elapsed = now - parseInt(scanTime);
+
+        if (elapsed > 60000) {
+          resultDiv.innerHTML = "⌛️ Session expired. Please scan the patient again.";
+          localStorage.removeItem("scannedPatient");
+          localStorage.removeItem("scanTime");
+        } else if (scannedPatient === linkedPatientId) {
+          resultDiv.innerHTML = "✅ Match successful! This medicine belongs to the patient.";
+        } else {
+          resultDiv.innerHTML = "⚠️ Mismatch: This medicine does not belong to the patient.";
+        }
       }
+    } catch (err) {
+      document.getElementById("result").innerHTML = "❌ Error: " + err.message;
     }
   </script>
 </body>
-
 </html>
