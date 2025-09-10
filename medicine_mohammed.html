@@ -1,40 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Medicine - Amlodipine</title>
+<meta charset="UTF-8">
+<title>Medicine Page</title>
+<style>
+body { font-family: Arial; text-align:center; padding:20px; }
+#result { margin-top:20px; font-weight:bold; }
+.success { color: green; }
+.error { color: red; }
+</style>
 </head>
 <body>
-  <h1>Medicine Page - Amlodipine 5mg Tablet</h1>
-  <p id="result">⏳ Checking patient match...</p>
+<h1>Medicine Information</h1>
+<p>Medicine: Amlodipine 5 mg Tablet</p>
+<div id="result"></div>
 
-  <script>
-    try {
-      const linkedPatientId = "P504321"; // Should match patient
-      const resultDiv = document.getElementById("result");
+<script>
+const patientId = "P504321"; // معرف المريض الصحيح
+const resultDiv = document.getElementById("result");
 
-      const scannedPatient = localStorage.getItem("scannedPatient");
-      const scanTime = localStorage.getItem("scanTime");
+// التحقق من فتح صفحة المريض أولاً
+const scannedId = localStorage.getItem("scannedPatientId");
 
-      if (!scannedPatient || !scanTime) {
-        resultDiv.innerHTML = "❌ Please scan the patient first.";
-      } else {
-        const now = Date.now();
-        const elapsed = now - parseInt(scanTime);
-
-        if (elapsed > 60000) {
-          resultDiv.innerHTML = "⌛️ Session expired. Please scan the patient again.";
-          localStorage.removeItem("scannedPatient");
-          localStorage.removeItem("scanTime");
-        } else if (scannedPatient === linkedPatientId) {
-          resultDiv.innerHTML = "✅ Match successful! This medicine belongs to the patient.";
-        } else {
-          resultDiv.innerHTML = "⚠️ Mismatch: This medicine does not belong to the patient.";
-        }
-      }
-    } catch (err) {
-      document.getElementById("result").innerHTML = "❌ Error: " + err.message;
-    }
-  </script>
+if (scannedId === patientId) {
+    resultDiv.innerHTML = "✅ This medicine belongs to the patient!";
+    resultDiv.className = "success";
+} else {
+    resultDiv.innerHTML = "❌ Please open the patient page first!";
+    resultDiv.className = "error";
+}
+</script>
 </body>
 </html>
